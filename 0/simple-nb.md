@@ -1,6 +1,7 @@
 ---
 jupyter:
   jupytext:
+    formats: ipynb,py
     text_representation:
       extension: .md
       format_name: markdown
@@ -259,7 +260,11 @@ plt.plot(x, predictions, color='blue', linewidth=3)
 **Task 1.5:** Write your answers in the cell below
 
 ```
+1) The higher the BMI the higher the insulin seems to be. But we saw in the variance a very high value. Thus we know that this correlation is not very strong.
 
+2) Since the correlation between BMI and Insulin is very weak, the BMI is not a good predictor for Insulin.
+
+3) You should add additional variables since the prediction in the BMI range of 20-45 is pretty bad. A more complex function than linear would not do anything, since the points are just clustered.
 ```
 
 # Step 2: Implementation using numpy
@@ -281,13 +286,13 @@ import numpy as np
 
 ```python
 # calculate mean and variance
-x = # your_code
-y = # your_code
+x = df.BMI
+y = df.Insulin
 
-mean_x = # your_code
-mean_y = # your_code
-var_x = # your_code
-var_y = # your_code
+mean_x = np.mean(x)
+mean_y = np.mean(y)
+var_x = np.var(x)
+var_y = np.var(y)
 
 print('x stats: mean=%.3f variance=%.3f' % (mean_x, var_x))
 print('y stats: mean=%.3f variance=%.3f' % (mean_y, var_y))
