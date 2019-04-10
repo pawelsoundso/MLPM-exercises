@@ -309,7 +309,7 @@ print('y stats: mean=%.3f variance=%.3f' % (mean_y, var_y))
 # **Question 2.1:** Which values does the covariance matrix represent? Which ones are the actual covariance? What are the other values? Write your anser in the cell below.
 
 # + {"pycharm": {}, "active": ""}
-#
+# The first column and the first row represent x, the second column and the second row represent y. This means that only at the indices [0][1] and [1][0] we can get the covariance value between x AND y. At [0][0] is the variance of x and at [1][1] is the variance of y.
 
 # + {"pycharm": {}, "cell_type": "markdown"}
 # Now, calculate the covariance, using the numpy function cov(). The function returns a covariance matrix, and you need to index the covariance value within the matrix. 
@@ -318,7 +318,7 @@ print('y stats: mean=%.3f variance=%.3f' % (mean_y, var_y))
 # + {"pycharm": {}}
 # calculate covariance
 def covariance(x,y):
-    covar = # your_code
+    covar = np.cov(x,y)[0][1] # your_code
     return covar
 
 covariance(x,y)
@@ -335,9 +335,9 @@ covariance(x,y)
 # + {"pycharm": {}}
 # Calculate coefficients
 def coefficients(x,y):
-    x_mean, y_mean = # your_code 
-    b = # your_code
-    a = # your_code
+    x_mean, y_mean = np.mean(x), np.mean(y) # your_code 
+    b = covariance(x,y) / np.var(x) # your_code
+    a = np.mean(y) - b * np.mean(x) # your_code
     return [a, b]
 
 # calculate coefficients
