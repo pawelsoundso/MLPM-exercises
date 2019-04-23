@@ -93,7 +93,7 @@ df.head()
 data = df.drop('Outcome',1)
 
 # we remove rows with missing values (0) from the table:
-data = data[(data != 0).all(1)]
+data = data[(data != 0).all(1)] # couldn't this result in wrong values for pregnancies?
 
 
 # + {"id": "NaF2nN5bBq_r", "colab_type": "text", "cell_type": "markdown"}
@@ -134,8 +134,10 @@ fig.tight_layout()
 #
 
 # + {"id": "MhCqmBPjBq_1", "colab_type": "code", "colab": {}}
-means = # your_code (one function call!)
-standard_deviations = # your_code (one function call!)
+means = data.mean(axis=0)
+standard_deviations = data.std(axis=0)
+for (col, row) in data.iterrows():
+    print(row.sub(means).div(standard_deviations))
 
 
 # + {"id": "ikz-7g1zBq_6", "colab_type": "text", "cell_type": "markdown"}
@@ -147,7 +149,10 @@ standard_deviations = # your_code (one function call!)
 
 # + {"id": "C1WdttulBq_9", "colab_type": "code", "colab": {}}
 def zscore(x):
-    return # your_code
+    print(x.name)
+    a = x.astype(float).sub(means.get(x.name))#.truediv(standard_deviations)
+    print(a.values)
+    return a
 
 standardizeddata = data.apply(zscore)
 standardizeddata.head()
