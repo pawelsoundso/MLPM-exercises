@@ -149,10 +149,7 @@ for (col, row) in data.iterrows():
 
 # + {"id": "C1WdttulBq_9", "colab_type": "code", "colab": {}}
 def zscore(x):
-    print(x.name)
-    a = x.astype(float).sub(means.get(x.name))#.truediv(standard_deviations)
-    print(a.values)
-    return a
+    return x.astype(float).sub(means.get(x.name)).truediv(standard_deviations.get(x.name))
 
 standardizeddata = data.apply(zscore)
 standardizeddata.head()
@@ -205,13 +202,13 @@ print('number of samples n =', n, 'and number of features d =', d)
 
 # + {"id": "h_TUDTFsBrAP", "colab_type": "code", "colab": {}}
 def least_squares(x,y):
-    # your code (roughly 2-3 lines)
+    theta = np.linalg.inv(x.transpose().dot(x)).dot(x.transpose()).dot(y)
     return theta
 
 
 # + {"id": "ffPlEnyBBrAT", "colab_type": "code", "colab": {}}
 def predict(x, theta):
-    # your code
+    y_hat = x.dot(theta)
     return y_hat
 
 
@@ -234,20 +231,21 @@ from sklearn.model_selection import train_test_split
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=1)
 X_valid, X_test, y_valid, y_test = train_test_split(X_test, y_test, test_size=0.5, random_state=1)
 
+
 # + {"id": "-FOg41cYBrAe", "colab_type": "text", "cell_type": "markdown"}
 # **Question 2**: After performing the operation above, How many % of the original data X are part of the train-, validation- and test-set, respectively? 
 
 # + {"id": "00nQsbZZBrAg", "colab_type": "raw", "cell_type": "markdown"}
-# train: ... %
-# validation: ... %
-# test: ... %
+# train: 70 %
+# validation: 17.5 %
+# test: 17.5 %
 
 # + {"id": "KvzVH24UBrAg", "colab_type": "text", "cell_type": "markdown"}
 # ## Task 4:  
 # Fit your model on `X_train` and `y_train` using your `least_squares`-function from above:
 
 # + {"id": "MlBC_rnPBrAh", "colab_type": "code", "colab": {}}
-theta = # your_code
+theta = least_squares(X_train, y_train)
 
 # + {"id": "ItoRHSTCBrAn", "colab_type": "code", "colab": {}}
 # we have a look at the resulting parameters
