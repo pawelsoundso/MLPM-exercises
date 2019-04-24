@@ -136,8 +136,6 @@ fig.tight_layout()
 # + {"id": "MhCqmBPjBq_1", "colab_type": "code", "colab": {}}
 means = data.mean(axis=0)
 standard_deviations = data.std(axis=0)
-for (col, row) in data.iterrows():
-    print(row.sub(means).div(standard_deviations))
 
 
 # + {"id": "ikz-7g1zBq_6", "colab_type": "text", "cell_type": "markdown"}
@@ -295,7 +293,7 @@ plt.show()
 # Write your answer in the cell below.
 
 # + {"id": "GuLLRFrXBrA5", "colab_type": "raw", "cell_type": "markdown"}
-#
+# We are underestimating the high values of y. The values we are overestimating are centered around 0.
 
 # + {"id": "kafg6gLXBrA6", "colab_type": "text", "cell_type": "markdown"}
 # ***
