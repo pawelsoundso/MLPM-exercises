@@ -5,8 +5,8 @@
 #     text_representation:
 #       extension: .py
 #       format_name: light
-#       format_version: '1.3'
-#       jupytext_version: 1.0.5
+#       format_version: '1.4'
+#       jupytext_version: 1.1.1
 #   kernelspec:
 #     display_name: Python 3
 #     language: python
@@ -358,10 +358,10 @@ thetas = np.array(thetas)
 # + {"id": "LIk7WPnJBrBJ", "colab_type": "code", "colab": {}}
 mse = []
 
-for i in range(len(L)):
-    y_hat = predict(X_valid, i)
+for theta in thetas:
+    y_hat = predict(X_valid, theta)
     y_diff = y_hat - y_valid
-    mse1 = np.mean([i**2 for i in y_diff])
+    mse1 = np.mean([j**2 for j in y_diff])
     mse.append(mse1)
 
 print('mse: [{:.4f}, {:.4f} ... {:.4f}, {:.4f}]'.format(mse[0],mse[1],mse[-2],mse[-1]))
@@ -399,9 +399,9 @@ plt.show()
 # find the best set of parameters theta:
 # this should not take more the 3 lines of code
 
-best_i = # your_code
-best_lambd = # your_code
-best_theta = # your_code
+best_i = np.argmin(mse)# your_code
+best_lambd = L[best_i] # your_code
+best_theta = thetas[best_i]# your_code
 
 # + {"id": "kxZgp4ieBrBZ", "colab_type": "code", "colab": {}}
 print('best lambda: {}'.format(best_lambd))
@@ -436,7 +436,7 @@ plt.show()
 
 # + {"id": "dwDSNi7aBrBq", "colab_type": "code", "colab": {}}
 unregularized_yhat = predict(X_test, theta)
-regularized_yhat = predict(X_test, thetas[best, :, :])
+regularized_yhat = predict(X_test, best_theta)
 
 mse_unregularized = np.mean(np.square(y_test - unregularized_yhat))
 mse_regularized = np.mean(np.square( y_test - regularized_yhat))
