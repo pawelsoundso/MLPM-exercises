@@ -200,7 +200,9 @@ print('number of samples n =', n, 'and number of features d =', d)
 
 # + {"id": "h_TUDTFsBrAP", "colab_type": "code", "colab": {}}
 def least_squares(x,y):
-    theta = np.linalg.inv(x.transpose().dot(x)).dot(x.transpose()).dot(y)
+    transposedX = x.transpose()
+    firstTerm = np.linalg.inv(transposedX.dot(x))
+    theta = firstTerm.dot(transposedX).dot(y)
     return theta
 
 
@@ -293,7 +295,7 @@ plt.show()
 # Write your answer in the cell below.
 
 # + {"id": "GuLLRFrXBrA5", "colab_type": "raw", "cell_type": "markdown"}
-# We are underestimating the high values of y. The values we are overestimating are centered around 0.
+# **Answer:** We are underestimating the high values of y. The values we are overestimating are centered around 0.
 
 # + {"id": "kafg6gLXBrA6", "colab_type": "text", "cell_type": "markdown"}
 # ***
@@ -305,7 +307,7 @@ plt.show()
 # Why do we use regularization?
 
 # + {"id": "nqii2jG1BrA7", "colab_type": "raw", "cell_type": "markdown"}
-#
+# **Answer:** Regularization can limit or even prevent overfitting and limiting the model parameters.
 
 # + {"id": "KDuij6VlBrA-", "colab_type": "text", "cell_type": "markdown"}
 # In the lecture we discussed the formula for regularized least squares using an L2-regularization term.
@@ -322,10 +324,11 @@ def regularized_least_squares(x,y,lambd):
     
     n = x.shape[0]
     m = x.shape[1]
+    oneDivN = 1/n
     
-    # your_code
-
-    return theta 
+    firstTerm = np.linalg.inv((oneDivN*x.transpose().dot(x)+lambd*np.identity(m)))
+    secondTerm = oneDivN*x.transpose().dot(y)
+    return firstTerm.dot(secondTerm)
 
 
 # + {"id": "2MLMWn7-BrBD", "colab_type": "text", "cell_type": "markdown"}
@@ -343,7 +346,7 @@ thetas = []
 
 # note: we could also do this with a list comprehension
 for lambd in L:
-    theta = # your code
+    theta = regularized_least_squares(X_train, y_train, lambd)
     thetas.append(theta)
     
 thetas = np.array(thetas)
@@ -356,7 +359,10 @@ thetas = np.array(thetas)
 mse = []
 
 for i in range(len(L)):
-    # your code
+    y_hat = predict(X_valid, i)
+    y_diff = y_hat - y_valid
+    mse1 = np.mean([i**2 for i in y_diff])
+    mse.append(mse1)
 
 print('mse: [{:.4f}, {:.4f} ... {:.4f}, {:.4f}]'.format(mse[0],mse[1],mse[-2],mse[-1]))
 
