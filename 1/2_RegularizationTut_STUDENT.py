@@ -116,8 +116,8 @@ fig.tight_layout()
 # What is shown on the x-axis? what is the y-axis?
 
 # + {"id": "R0w6_UR7Bq_z", "colab_type": "raw", "cell_type": "markdown"}
-# x-axis:
-# y-axis:
+# x-axis: Different Values for the specified attributes.
+# y-axis: The number of occurrences in the dataset for the respective value of the attribute.
 
 # + {"id": "sjDfotQiBq_0", "colab_type": "text", "cell_type": "markdown"}
 # As illustrated above, the different variables have vastly different scales. This can make it hard to interpret the coefficients of our linear regression model, because they will depend on the original scales of each variable. For this reason, we would like to standardize the variables by calculating *z-scores*, where
@@ -237,8 +237,8 @@ X_valid, X_test, y_valid, y_test = train_test_split(X_test, y_test, test_size=0.
 
 # + {"id": "00nQsbZZBrAg", "colab_type": "raw", "cell_type": "markdown"}
 # train: 70 %
-# validation: 17.5 %
-# test: 17.5 %
+# validation: 15 %
+# test: 15 %
 
 # + {"id": "KvzVH24UBrAg", "colab_type": "text", "cell_type": "markdown"}
 # ## Task 4:  
@@ -384,7 +384,7 @@ plt.show()
 # Investigate the graph above. How would you visually identify the best value for lambda?
 
 # + {"id": "4FwDBKq-BrBT", "colab_type": "raw", "cell_type": "markdown"}
-# write your answer here
+# The best value for lambda is at the minimum of the graph. That means it is visible as the lambda with the smallest mse.
 
 # + {"id": "fVYFgEVkBrBT", "colab_type": "text", "cell_type": "markdown"}
 # ## Task 8:
