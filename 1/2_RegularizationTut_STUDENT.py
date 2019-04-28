@@ -5,8 +5,8 @@
 #     text_representation:
 #       extension: .py
 #       format_name: light
-#       format_version: '1.3'
-#       jupytext_version: 1.0.5
+#       format_version: '1.4'
+#       jupytext_version: 1.1.1
 #   kernelspec:
 #     display_name: Python 3
 #     language: python
@@ -295,7 +295,7 @@ plt.show()
 # Write your answer in the cell below.
 
 # + {"id": "GuLLRFrXBrA5", "colab_type": "raw", "cell_type": "markdown"}
-# **Answer:** We are underestimating the high values of y. The values we are overestimating are centered around 0.
+# **Answer:** We are underestimating the high values of y. The values we are overestimating are centered around 0. The reason for the behaviour could be that the model in its linearity can't fit to the data in these extreme cases very well.
 
 # + {"id": "kafg6gLXBrA6", "colab_type": "text", "cell_type": "markdown"}
 # ***
