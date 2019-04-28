@@ -134,8 +134,8 @@ fig.tight_layout()
 #
 
 # + {"id": "MhCqmBPjBq_1", "colab_type": "code", "colab": {}}
-means = data.mean(axis=0)
-standard_deviations = data.std(axis=0)
+means = np.mean(data, axis=0)
+standard_deviations = np.std(data, axis=0)
 
 
 # + {"id": "ikz-7g1zBq_6", "colab_type": "text", "cell_type": "markdown"}
