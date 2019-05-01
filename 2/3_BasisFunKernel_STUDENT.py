@@ -186,7 +186,7 @@ plt.show()
 # Why do you think this is the case? (1 sentence)
 
 # + {"active": ""}
-# No it doesn't, since the validation error is 
+# No it doesn't, since the validation error isn't much higher than the training error.
 # -
 
 # ## Task 2:  
@@ -199,12 +199,16 @@ plt.show()
 # +
 def evaluate_ridge(X_train, y_train, X_test, y_test, a):
   
-    #your_code (~3 lines)
+    model = Ridge(alpha=a, solver='lsqr', normalize=False)
+    model.fit(X_train, y_train)
+    
+    y_pred = model.predict(X_test)
+    error = rmse(y_pred, y_test)
   
     return y_pred, error
 
 # we evaluate the function for the best value of a you found above
-y_hat_test, error = evaluate_ridge(X_train, y_train, X_test, y_test, best_a)
+y_pred_test, error = evaluate_ridge(X_train, y_train, X_test, y_test, best_a)
 print('test error: {:.4f}'.format(error))
 # -
 
