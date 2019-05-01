@@ -425,7 +425,7 @@ X_valid, X_test, y_valid, y_test = train_test_split(X_test, y_test, test_size=0.
 # hint: np.linalg.inv(), np.eye(), dot() 
 
 def get_a(K, lambd, y):
-    return #your_code
+    return np.linalg.inv(np.add(K, np.dot(lambd, np.eye(len(K))))).dot(y)
 
 
 # ## Task 6:
@@ -440,7 +440,7 @@ def get_a(K, lambd, y):
 # +
 #Student version
 
-K_linear = #your_code
+K_linear = X_train @ X_train.transpose()
 
 print('shape:     {}'.format(K_linear.shape))
 print('a1: {}'.format(get_a(K_linear, 0.01, y_train)[0]))
@@ -460,7 +460,7 @@ K_rbf = pairwise_kernels(X_train, metric='rbf')
 # **Question 3:**  
 # How does the function behave, if x and x' are very similar or different?
 
-#
+# If they are very similar, the exponent becomes almost zero, and the function value is close to 1. If they are very different, the exponent is a 
 
 # In order to predict $y$ for new observations, we have to calculate the pairwise kernel between the new observations and the original observations. The kernel vector $k(x^*)$ is defined as the vector of inner $k(x^*, x_N )$ products of $\mathbf Φ(x^*)$ with all training data points in matrix $\mathbf Φ$.
 
