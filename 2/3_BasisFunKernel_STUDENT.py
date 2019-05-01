@@ -296,7 +296,7 @@ plot_transform(np.linspace(-2,2,num=100), mu=[-1,0,1,0], s=[0.2, 0.2, 0.2, 1.], 
 # What do the mu and s parameters control for the sigmoid and the Gaussian basis functions?
 #
 
-By changing mu you can shift the curve  and by changing s you can stretch or compress it (also horizontally).
+By changing mu you can shift the curve horizontally and by changing s you can stretch or compress it (also horizontally).
 
 
 # Below we've implemented a function `transform_data(df, cols, M, S, func)` that allows you to compute transformations of your input variables using the basis functions which you implemented above, where:
@@ -336,7 +336,7 @@ S = np.array([5.,2.,1.,0.5,0.25,0.1,0.01])
 M = M
 S = S
 
-func = #your_code 
+func = sigmoid
 
 data_transform = transform_data(data, indep_var, M, S, func)
 
