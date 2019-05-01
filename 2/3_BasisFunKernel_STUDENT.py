@@ -292,12 +292,12 @@ plot_transform(np.linspace(-2,2,num=100), mu=[-1,0,1,0], s=[0.2, 0.2, 0.2, 1.], 
 #Call for rbf function
 plot_transform(np.linspace(-2,2,num=100), mu=[-1,0,1,0], s=[0.2, 0.2, 0.2, 1.], fun=rbf)
 
+
 # ** Question 2 **:  
 # What do the mu and s parameters control for the sigmoid and the Gaussian basis functions?
 #
 
-By changing mu you can shift the curve horizontally and by changing s you can stretch or compress it (also horizontally).
-
+# By changing mu you can shift the curve horizontally and by changing s you can stretch or compress it (also horizontally).
 
 # Below we've implemented a function `transform_data(df, cols, M, S, func)` that allows you to compute transformations of your input variables using the basis functions which you implemented above, where:
 #
@@ -460,7 +460,7 @@ K_rbf = pairwise_kernels(X_train, metric='rbf')
 # **Question 3:**  
 # How does the function behave, if x and x' are very similar or different?
 
-# If they are very similar, the exponent becomes almost zero, and the function value is close to 1. If they are very different, the exponent is a 
+# If they are very similar, the exponent becomes almost zero, and the function value is close to 1. If they are very different, the exponent is a big negative number, so the function value is close to 0.
 
 # In order to predict $y$ for new observations, we have to calculate the pairwise kernel between the new observations and the original observations. The kernel vector $k(x^*)$ is defined as the vector of inner $k(x^*, x_N )$ products of $\mathbf Φ(x^*)$ with all training data points in matrix $\mathbf Φ$.
 
@@ -486,18 +486,18 @@ def tune_kernel_regression(X_train, y_train, X_valid, y_valid, L, metric='linear
     K = pairwise_kernels(X_train, metric=metric)
     
     for lambd in L:
-        a = # your_code     
-        k_xstar = # your_code
-        y_hat_train = # your_code
-        y_hat_valid = # your_code
+        a = get_a(K, lambd, y_train) 
+        k_xstar = pairwise_kernels(X_valid, X_train, metric=metric)
+        y_hat_train = K.dot(a)
+        y_hat_valid = k_xstar.dot(a)
         
-        train_err = # your_code
-        valid_err = # your_code
+        train_err = rmse(y_train, y_hat_train)
+        valid_err = rmse(y_valid, y_hat_valid)
         
         rmse_train.append(train_err)
         rmse_valid.append(valid_err)
     
-    best_lambd = # your_code
+    best_lambd = L[np.argmin(rmse_valid)]
     
     return rmse_train, rmse_valid, best_lambd
 
@@ -571,7 +571,7 @@ print('test error rbf kernel:    {:.4f}'.format(eval_Krbf[1]))
 # **Question 4:**
 # Look at the performance graphs and test errors above. What can you say about the performances of linear and rbf kernel regressions? Which one performed better?
 
-#
+# The rbf kernel was able to outperform the linear kernel in a certain range of lambda. However, when lambda is too small (< 0.1), the rbf will overfit as we can observe that only the train performance is good while the validation performance is bad. The linear model isn't prone to overfitting with small lambdas.
 
 # Success! we have finally managed to improve performance compared to the original linear model!
 #
@@ -603,7 +603,3 @@ plt.show()
 # Thank you!  
 #
 # Jana & Remo
-
-
-
-
