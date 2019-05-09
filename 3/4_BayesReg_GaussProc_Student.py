@@ -136,10 +136,10 @@ X_valid, X_test, y_valid, y_test = train_test_split(X_test, y_test, test_size=0.
 
 def predictive_Gauss(X,y,X_star, metric, sigma_sq):
     
-    kernel_x_x = np.dot(X,X.transpose())
-    kernel_xs_x = np.dot(X_star, X.transpose())
-    kernel_x_xs = np.dot(X, X_star.transpose())
-    kernel_xs_xs = np.dot(X_star, X_star.transpose())
+    kernel_x_x = pairwise_kernels(X,X, metric=metric)
+    kernel_xs_x = pairwise_kernels(X_star, X, metric=metric)
+    kernel_x_xs = pairwise_kernels(X, X_star, metric=metric)
+    kernel_xs_xs = pairwise_kernels(X_star, X_star, metric=metric)
     
     inner_value = np.dot(kernel_xs_x, np.linalg.inv(kernel_x_x + sigma_sq * np.eye(len(y))))
     
