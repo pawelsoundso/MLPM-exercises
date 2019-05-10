@@ -166,7 +166,7 @@ print('No expected output this time! ;)')
 # ## Task 2: ## 
 # Retrieve the standard deviation for each all predictions $\mathbf{y}^*$ (`sigma_star`):
 
-standard_deviations = [sigma_star[i,i] for i in range(0,len(sigma_star))]
+standard_deviations = [np.sqrt(sigma_star[i,i] for i in range(0,len(sigma_star)))]
 
 # +
 # we plot our predictions with error-bars denoting +-2*(standard deviation) 
