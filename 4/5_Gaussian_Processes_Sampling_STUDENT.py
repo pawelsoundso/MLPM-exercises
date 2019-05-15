@@ -61,9 +61,16 @@ x = np.linspace(-50,50,num=100,endpoint=True) # 100 values from -50 to 50
 def k_sqexp(x, A, L):
     
     # your_code (use either a nested loop or nested list comprehension to contstruct K)
+    dim = len(x)
+    Asq = A * A
+    Lsq = L * L
+    K = np.ndarray(shape=(dim, dim))
+    for i in range(dim):
+        exponents = [-((x[i] - x_j) ** 2)/(2*Lsq) for x_j in x]
+        K[i] = Asq*np.exp(exponents)
     
     # we add a small offset to the diagnonal for numerical stability later
-    K = K + np.eye(len(x))*1e-7
+    K += np.eye(len(x))*1e-7
     
     return K
 
@@ -104,17 +111,17 @@ ax[2].imshow(K3)
 #
 # Sample a set of `len(x)` independent variables from the distribution $\mathcal{N}(0,1)$ (tip: use `normal()`), store the values in `y_tilde`. Calculate the corresponding cholesky matrices for the kernel matrices `K1`, `K2`, `K3` with the `cholesky()` function (already imported above), which will give you chol1, chol2 and chol3 respectively. Rotate `y_tilde` with the different cholesky matrices, which will yield `y1`, `y2` and `y3` respectively:
 
-y_tilde = # your_code (literally one function call)
+y_tilde = normal(0,1, len(x)) # your_code (literally one function call)
 
 plt.scatter(x, y_tilde, color='y', label='y_tilde')
 plt.legend()
 
 # +
 # calculate cholesky matrices for K1, K2, K3:
-chol1, chol2, chol3 = # your_code 
+chol1, chol2, chol3 = cholesky(K1), cholesky(K2), cholesky(K3) # your_code 
 
 # "rotate" y_tilde with chol1, chol2 and col3: 
-y1, y2, y3 = # your_code
+y1, y2, y3 = y_tilde.dot(chol1), y_tilde.dot(chol2), y_tilde.dot(chol3)# your_code
 # -
 
 plt.plot(x, y1, color='r', label='L = 10.')
@@ -144,6 +151,7 @@ print('y3[10]: {:.3f}'.format(y3[10]))
 def sample_gauss(K,n):
     
     # your_code
+    S = np.ndarray(shape=(n, len(K)))
     
     return S
 
