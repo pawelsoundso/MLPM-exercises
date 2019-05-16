@@ -64,8 +64,8 @@ y_train[0:20] # 1 where malignant, 0 otherwise
 # Implement the logistic sigmoid following the formula above. We have to make sure that the output of this function is never exactly 0 or 1, because we will take the log of it. Therefore, we use np.clip() to limit range (from ... to).
 
 def logistic(a):
-    logist = # your_code
-    logist = # your_code
+    b = np.clip(a, -100, 100) #making sure it never reaches 0 or 1 because of rounding
+    logist = np.exp(b)/(1+np.exp(b))
     return logist
 
 
@@ -85,6 +85,7 @@ def logistic(a):
 # ## Task 2:
 # Implement the log-loss (binary cross entropy function) using the formula above. 
 
+# +
 def logloss(y, y_hat):
     """
     return the loss for predicted probabilities y_hat, and class labels y
@@ -92,11 +93,20 @@ def logloss(y, y_hat):
     y -- scalar or numpy array
     y_hat -- scalar or numpy array
     """
-
-    loss = #your_code
+    loss = 0
+    for idx, n  in enumerate(y):
+        n_prime = y_hat[idx]
+        if n == 0.0:
+            loss -= np.log(1 - logistic(n_prime))
+        else:
+            loss -= np.log(logistic(n_prime))
     
     return loss
-    
+
+
+logloss(np.array([0.,1.,1.]), np.array([0.1, 0.5, 0.99]))
+# -
+
 
 
 logloss(np.array([0.,1.,1.]), np.array([0.1, 0.5, 0.99]))
@@ -117,7 +127,15 @@ def regularizer(w, lambd):
     '''
     return the value for the regularizer for a given w and lamd
     ''' 
-    reg = # your_code
+    loss = 0
+    for idx, n  in enumerate(y):
+        n_prime = y_hat[idx]
+        if n == 0.0:
+            loss -= np.log(1 - logistic(n_prime*w))
+        else:
+            loss -= np.log(logistic(n_prime*w))
+    
+    reg = loss + lambd*0.5*np.sum([v*v for v in w])
     return reg
 
 
@@ -196,14 +214,13 @@ class Steepest_descent_optimizer():
         self.max_iter = 10000 # set the max number of iterations
     
     def _gradient(self):
-        # calculate the gradient of w 
-        # your_code
+        grad = self.X.transpose().dot(logistic(self.X.dot(self.w))-self.y) + self.lambd * self.w
         return grad
     
     def _update(self):
         grad = self._gradient()
         # update the weights using the gradient and learning rate
-        self.w =  # your_code
+        self.w =  self.w - grad*self.alpha
         
     def predict(self, X):
         return logistic(X.dot(self.w))
