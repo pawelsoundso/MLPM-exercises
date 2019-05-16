@@ -151,10 +151,9 @@ print('y3[10]: {:.3f}'.format(y3[10]))
 def sample_gauss(K,n):
     
     # your_code
-    S = np.ndarray(shape=(n, len(K)))
-    
+    S = np.dot(K, np.random.normal(size=(len(K),n)))
+        
     return S
-
 
 
 # -
