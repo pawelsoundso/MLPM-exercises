@@ -99,6 +99,7 @@ def logloss(y, y_hat):
         if n == 0.0:
             loss -= np.log(1 - logistic(n_prime))
         else:
+            
             loss -= np.log(logistic(n_prime))
     
     return loss
@@ -126,16 +127,8 @@ logloss(np.array([0.,1.,1.]), np.array([0.1, 0.5, 0.99]))
 def regularizer(w, lambd):
     '''
     return the value for the regularizer for a given w and lamd
-    ''' 
-    loss = 0
-    for idx, n  in enumerate(y):
-        n_prime = y_hat[idx]
-        if n == 0.0:
-            loss -= np.log(1 - logistic(n_prime*w))
-        else:
-            loss -= np.log(logistic(n_prime*w))
-    
-    reg = loss + lambd*0.5*np.sum([v*v for v in w])
+    '''     
+    reg = lambd*0.5*np.sum([v*v for v in w])
     return reg
 
 
@@ -212,9 +205,22 @@ class Steepest_descent_optimizer():
         self.w = np.zeros(X.shape[1]) # we initialize the weights with zeros
         
         self.max_iter = 10000 # set the max number of iterations
+        
+    def _y_as_zero_ones(self):
+        new_y = []
+        for ys in self.y:
+            if ys == "M":
+                new_y.append(1)
+            else:
+                new_y.append(0)
+        return np.array(new_y)
     
     def _gradient(self):
-        grad = self.X.transpose().dot(logistic(self.X.dot(self.w))-self.y) + self.lambd * self.w
+        log = logistic(self.X.dot(self.w))        
+        log_m_y = log - self._y_as_zero_ones()
+        reg = self.lambd * self.w
+        grad = self.X.transpose().dot(log_m_y) + reg
+       
         return grad
     
     def _update(self):
@@ -233,9 +239,11 @@ class Steepest_descent_optimizer():
             # update the weights (use the method you implemented above)
             # append the current loss (use self.predict, and the regularizer(), and logloss() functions)
             
-            # your_code
+            self._update()
+            prediction = self.predict(self.X)
+            current_loss = logloss(self._y_as_zero_ones(), prediction.values) + regularizer(self.w, self.lambd)
             
-            loss.append(# your_code
+            loss.append(current_loss)
             it += 1
         return loss
 
@@ -266,7 +274,7 @@ importlib.reload(util)
 
 # Let's see how accurate our predictions are using the average precision score and the roc area under the curve score.
 
-average_precision_score(y_test, test_pred)
+average_precision_score(y_test, test_pred, pos_label="M")
 
 # ** Expected output **:  ~ 0.993
 
