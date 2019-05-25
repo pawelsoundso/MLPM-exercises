@@ -151,7 +151,7 @@ print('y3[10]: {:.3f}'.format(y3[10]))
 def sample_gauss(K,n):
     
     # your_code
-    S = np.dot(K, np.random.normal(size=(len(K),n)))
+    S = np.dot(np.random.normal(size=(n, len(K))), K)
         
     return S
 
@@ -170,7 +170,7 @@ print('Y.shape: {}'.format(Y.shape))
 #
 # Repeat the plot below for different pairs of points. What do we observe when we pick points that are close to each other (i.e. 10 and 12), vs when we pick points that are far away? 
 
-plt.scatter(Y[:,1], Y[:,10])
+plt.scatter(Y[:,10], Y[:,12])
 
 # Congratulations, you made it through the sixth tutorial of this course!
 #

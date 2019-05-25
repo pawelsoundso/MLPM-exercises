@@ -97,22 +97,17 @@ def logloss(y, y_hat):
     for idx, n  in enumerate(y):
         n_prime = y_hat[idx]
         if n == 0.0:
-            loss -= np.log(1 - logistic(n_prime))
+            loss -= np.log(1 - n_prime)
         else:
-            
-            loss -= np.log(logistic(n_prime))
+            loss -= np.log(n_prime)
     
     return loss
 
 
 logloss(np.array([0.,1.,1.]), np.array([0.1, 0.5, 0.99]))
+
+
 # -
-
-
-
-logloss(np.array([0.,1.,1.]), np.array([0.1, 0.5, 0.99]))
-
-
 # ** Expected output **:
 # 0.80855803207127308
 
@@ -205,19 +200,10 @@ class Steepest_descent_optimizer():
         self.w = np.zeros(X.shape[1]) # we initialize the weights with zeros
         
         self.max_iter = 10000 # set the max number of iterations
-        
-    def _y_as_zero_ones(self):
-        new_y = []
-        for ys in self.y:
-            if ys == "M":
-                new_y.append(1)
-            else:
-                new_y.append(0)
-        return np.array(new_y)
     
     def _gradient(self):
         log = logistic(self.X.dot(self.w))        
-        log_m_y = log - self._y_as_zero_ones()
+        log_m_y = log - self.y
         reg = self.lambd * self.w
         grad = self.X.transpose().dot(log_m_y) + reg
        
@@ -241,7 +227,7 @@ class Steepest_descent_optimizer():
             
             self._update()
             prediction = self.predict(self.X)
-            current_loss = logloss(self._y_as_zero_ones(), prediction.values) + regularizer(self.w, self.lambd)
+            current_loss = logloss(self.y, prediction.values) + regularizer(self.w, self.lambd)
             
             loss.append(current_loss)
             it += 1
@@ -274,7 +260,7 @@ importlib.reload(util)
 
 # Let's see how accurate our predictions are using the average precision score and the roc area under the curve score.
 
-average_precision_score(y_test, test_pred, pos_label="M")
+average_precision_score(y_test, test_pred)
 
 # ** Expected output **:  ~ 0.993
 
@@ -282,6 +268,7 @@ roc_auc_score(y_test, test_pred)
 
 # ** Expected output **: ~ 0.995
 
+print(y_test.dtype)
 util.plot_confusion_matrix(test_pred, y_test)
 
 # Congratulations, you made it through one part of the fifth tutorial of this course!
