@@ -131,11 +131,11 @@ def init_layers(nn_architecture, seed = 99):
 # +
 # STUDENT
 def sigmoid(Z):
-    sig = 1 / (1 + np.exp(Z)) #your_code
+    sig = 1 / (1 + np.exp(np.negative(Z))) #your_code
     return sig
 
 def relu(Z):
-    relu = max(0, Z) #your_code
+    relu = np.maximum(0, Z) #your_code
     return relu
 
 
@@ -152,7 +152,7 @@ def relu(Z):
 def single_layer_forward_propagation(A_prev, W_curr, b_curr, activation="relu"):
     # calculation of the input value for the activation function
     
-    Z_curr = W_curr * A_prev + b_curr #your_code
+    Z_curr = np.add(W_curr.dot(A_prev), b_curr) #your_code
     
     # selection of activation function
     if activation is "relu":
@@ -226,7 +226,7 @@ def get_cost_value(Y_hat, Y):
     # number of examples
     m = Y_hat.shape[1]
     # calculation of the cost according to the formula
-    cost = - np.mean([Y[i] * log(Y_hat[i]) + (1 - Y[i]) * log(1 - Y_hat[i]) for i in range(m)]) #your_code
+    cost = - np.mean([Y[0][i] * np.log(Y_hat[0][i]) + (1 - Y[0][i]) * np.log(1 - Y_hat[0][i]) for i in range(m)], axis=0) #your_code
     return np.squeeze(cost)
 
 
@@ -283,14 +283,14 @@ def get_accuracy_value(Y_hat, Y):
 # STUDENT
 
 def relu_backward(dA, Z):
-    dZ = dA * np.sign(max(Z)) #your_code
+    dZ = dA * np.sign(np.maximum(0, Z)) #your_code
     
     return dZ;
 
 def sigmoid_backward(dA, Z):
     # tip: make use of the "sigmoid"-function we implemented above 
-    sig = sigmoid(Z) #your_code
-    dZ = #your_code
+    sig = sigmoid(Z) * (1 - sigmoid(Z)) #your_code
+    dZ = dA * sig #your_code
     return dZ
 
 
@@ -330,11 +330,11 @@ def single_layer_backward_propagation(dA_curr, W_curr, b_curr, Z_curr, A_prev, a
     dZ_curr = backward_activation_func(dA_curr, Z_curr)
     
     # derivative of the matrix W
-    dW_curr = #your_code
+    dW_curr = dZ_curr.dot(A_prev.transpose()) / m #your_code
     # derivative of the vector b
-    db_curr = #your_code
+    db_curr = np.mean(dZ_curr, axis=1, keepdims=True) #your_code
     # derivative of the matrix A_prev
-    dA_prev = #your_code
+    dA_prev = W_curr.transpose().dot(dZ_curr) #your_code
 
     return dA_prev, dW_curr, db_curr
 
@@ -395,7 +395,7 @@ def full_backward_propagation(Y_hat, Y, memory, params_values, nn_architecture):
         W_curr = params_values["W" + str(layer_idx_curr)]
         b_curr = params_values["b" + str(layer_idx_curr)]
         
-        dA_prev, dW_curr, db_curr = #your_code
+        dA_prev, dW_curr, db_curr = single_layer_backward_propagation(dA_curr, W_curr, b_curr, Z_curr, A_prev, activ_function_curr) #your_code
         
         grads_values["dW" + str(layer_idx_curr)] = dW_curr
         grads_values["db" + str(layer_idx_curr)] = db_curr
@@ -426,8 +426,8 @@ def update(params_values, grads_values, nn_architecture, learning_rate):
 
     # iteration over network layers
     for layer_idx, layer in enumerate(nn_architecture, 1):
-        params_values["W" + str(layer_idx)] = #your_code        
-        params_values["b" + str(layer_idx)] = #your_code 
+        params_values["W" + str(layer_idx)] -= learning_rate * grads_values["dW" + str(layer_idx)] #your_code        
+        params_values["b" + str(layer_idx)] -= learning_rate * grads_values["db" + str(layer_idx)] #your_code 
 
     return params_values;
 
@@ -443,7 +443,7 @@ def update(params_values, grads_values, nn_architecture, learning_rate):
 def train(X, Y, nn_architecture, epochs, learning_rate, verbose=False):
     # initiation of neural net parameters
     
-    params_values = #your_code
+    params_values = init_layers(nn_architecture) #your_code
     
     # initiation of lists storing the history 
     # of metrics calculated during the learning process 
@@ -453,7 +453,7 @@ def train(X, Y, nn_architecture, epochs, learning_rate, verbose=False):
     # performing calculations for subsequent iterations
     for i in range(epochs):
         # step forward
-        Y_hat, cache = #your_code
+        Y_hat, cache = full_forward_propagation(X, params_values, nn_architecture) #your_code
         
         # calculating metrics and saving them in history
         cost = get_cost_value(Y_hat, Y)
@@ -462,22 +462,24 @@ def train(X, Y, nn_architecture, epochs, learning_rate, verbose=False):
         accuracy_history.append(accuracy)
         
         # step backward - calculating gradient
-        grads_values = #your_code
+        grads_values = full_backward_propagation(Y_hat, Y, cache, params_values, nn_architecture) #your_code
         
         # updating model state
-        params_values = #your_code
+        params_values = update(params_values, grads_values, nn_architecture, learning_rate) #your_code
         
         if(i % 50 == 0):
             if(verbose):
                 print("Iteration: {:05} - cost: {:.5f} - accuracy: {:.5f}".format(i, cost, accuracy))
+        break
             
-    return params_values
+    return params_values, cost_history, accuracy_history
 
 
 # -
 
 # Training
-params_values, cost_history, accuracy_history = train(np.transpose(X_train), np.transpose(y_train.reshape((y_train.shape[0], 1))), NN_ARCHITECTURE, 10000, 0.01, verbose=True)
+num_epochs = 1000
+params_values, cost_history, accuracy_history = train(np.transpose(X_train), np.transpose(y_train.reshape((y_train.shape[0], 1))), NN_ARCHITECTURE, num_epochs, 0.01, verbose=True)
 
 # Prediction
 Y_test_hat, _ = full_forward_propagation(np.transpose(X_test), params_values, NN_ARCHITECTURE)
@@ -488,9 +490,9 @@ print("Test set accuracy: {:.2f}".format(acc_test))
 
 # And last but not least, let's plot how the accuracy and cost evolved over the training epochs...
 
-plt.plot(np.arange(10000), np.array(cost_history))
+plt.plot(np.arange(num_epochs), np.array(cost_history))
 
-plt.plot(np.arange(10000), np.array(accuracy_history))
+plt.plot(np.arange(num_epochs), np.array(accuracy_history))
 
 # ### Question 1:
 # What can you say about the learning progress of the model?
