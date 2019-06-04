@@ -44,7 +44,7 @@ X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.1, random_
 sns.set_style("whitegrid")
 plt.figure(figsize=(8,8))
 plt.scatter(X_train[:, 0], X_train[:, 1], c=y_train.ravel(), s=50, cmap=plt.cm.Spectral, edgecolors='black');
-
+plt.show()
 # -
 
 # From this plot we can see that the data is not linearly separable. So let's use a neural network model to classify the blue from the red data points. Here we will use a neural network, with 4 hidden layers with 25, 50, 50 and 25 units respectively and an output layer of 2 units for our binary classification (red or blue).
@@ -470,7 +470,6 @@ def train(X, Y, nn_architecture, epochs, learning_rate, verbose=False):
         if(i % 50 == 0):
             if(verbose):
                 print("Iteration: {:05} - cost: {:.5f} - accuracy: {:.5f}".format(i, cost, accuracy))
-        break
             
     return params_values, cost_history, accuracy_history
 
@@ -497,10 +496,12 @@ plt.plot(np.arange(num_epochs), np.array(accuracy_history))
 # ### Question 1:
 # What can you say about the learning progress of the model?
 
+# **Answer**: The neural network very steadily improves. Sometimes - depending on the weight initialization - you can see a bump in accuracy at about 900 epochs. After 7000 epochs the accuracy is almost always 1 or close to it.
+
 # ### Question 2:
 # Can you find out how many trainable parameters our model contains? Do you think that this number of parameters is appropriate for our classification task?
 
-
+# **Answer**: We have 4 hidden layers with 25, 50, 50 and 25 neurons. Two input neuros and one output neuron. For each neuron in the layers we have inputs + 1 (bias) as parameters. There are no parameters for the input layer. Thus we have (2*25+25)+(25*50+50)+(50*50+50)+(50*25+25)+(25*1+1) = 5226 parameters.
 
 # Congratulations, you made it through the sixth tutorial of this course!
 #
