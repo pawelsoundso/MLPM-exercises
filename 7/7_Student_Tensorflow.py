@@ -305,10 +305,11 @@ def create_placeholders(n_x, n_y):
 # As we did in our last exercise, we define the architecture using a list of dictionaries:
 
 NN_ARCHITECTURE = [
-    {"input_dim": 2352, "output_dim": 25, "activation": "relu"},
-    {"input_dim": 25, "output_dim": 25, "activation": "relu"},
-    {"input_dim": 25, "output_dim": 25, "activation": "relu"},
-    {"input_dim": 25, "output_dim": 3, "activation": "softmax"},
+    {"input_dim": 2352, "output_dim": 36, "activation": "relu"},
+    {"input_dim": 36, "output_dim": 25, "activation": "relu"},
+    {"input_dim": 25, "output_dim": 18, "activation": "relu"},
+    {"input_dim": 18, "output_dim": 9, "activation": "relu"},
+    {"input_dim": 9, "output_dim": 3, "activation": "softmax"},
 ] 
 
 
@@ -597,11 +598,13 @@ def model(X_train, Y_train, X_test, Y_test, architecture, learning_rate = 0.0001
         
         return parameters
 
-model(X_train, y_train, X_test, y_test, NN_ARCHITECTURE, num_epochs=2000, learning_rate=0.0002)
+print(NN_ARCHITECTURE)
+model(X_train, y_train, X_test, y_test, NN_ARCHITECTURE, num_epochs=1500, learning_rate=0.0002)
 
 # **Question:**  
 # Play around with the architecture, (i.e. add another layer), learning rate, epochs, ... as far the your computer allows it. Did you find a constellation, that gives a better result? 
-
+#
+# Using the configuration epochs=1500 and lr= 0.0002 we could increase the accuracy from (0.779/0.755) to (0.808/0.797) train/ test accuracy. 
 
 
 # Congratulations, you made it through the seventh tutorial of this course!
