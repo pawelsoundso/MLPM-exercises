@@ -170,7 +170,7 @@ print('Y.shape: {}'.format(Y.shape))
 #
 # Repeat the plot below for different pairs of points. What do we observe when we pick points that are close to each other (i.e. 10 and 12), vs when we pick points that are far away? 
 
-plt.scatter(Y[:,10], Y[:,12])
+plt.scatter(Y[:,20], Y[:,20])
 
 # Congratulations, you made it through the sixth tutorial of this course!
 #
